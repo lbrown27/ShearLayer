@@ -1,0 +1,6 @@
+function [upper_speed, lower_speed] = getInfo(num)
+upper_speed_vec = [156.25, 314.89, 434.76, 509.24,564.16];
+lower_speed_vec = [];
+upper_speed = upper_speed_vec(num);
+lower_speed = lower_speed_vec(num);
+end
