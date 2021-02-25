@@ -6,7 +6,7 @@ find_splitter_idx(y);
 for i = 2:N
     bool = 0;
     for j = splitter_idx:-1:150
-       if (q(j,i) < (2 -  grade/100) * lower_speed && bool == 0)
+       if (q(j,i) < -(2 -  grade/100) * lower_speed && bool == 0)
            ydown(i) = j;
            bool = 1;
        end  
@@ -17,7 +17,7 @@ yup = (N-1)* ones(1,N);
 for i = 2:N
     bool = 0;
     for j = splitter_idx:N
-       if (q(j,i) > (grade/100 * upper_speed) && bool == 0)
+       if (q(j,i) > (.9 * upper_speed) && bool == 0)
            yup(i) = j;
            bool = 1;
        end  

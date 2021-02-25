@@ -1,6 +1,6 @@
-function [thickness, middle] = plotThicknesses(x,y,q)
+function [thickness, middle] = plotThicknesses(x,y,q, grade)
 global N
-[lowerShearThickness, upperShearThickness, thickness, middle] = shearLayerThickness(x,y,q);
+[lowerShearThickness, upperShearThickness, thickness, middle] = shearLayerThickness(x,y,q, grade);
 hold on;
 
 thicknessVecLow = ones(1,N-1);

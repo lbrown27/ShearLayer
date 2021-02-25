@@ -5,7 +5,7 @@ clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
     splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
 idx = 13; % for u velocity
-N = 950; % # grid points in each direction
+N = 925; % # grid points in each direction
 caseNum = 2;
 
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
@@ -22,6 +22,7 @@ y = linspace(-lower_length, upper_length, N);
 [X,Y] = meshgrid(x,y);
 x_idx = 2;
 y_idx = 3;
+grade = 90;
 
 %=============================Setup Complete===============================
 %% experimental data
@@ -47,28 +48,29 @@ Y = Y_empirical;
 x = x_new;
 y = y_new;
 q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(1,'Experimental Data',q_ED);
+[thick_ED, middle_ED] = plot_colorplot(1,'Experimental Data',q_ED, grade);
 [upper, lower] = find_avg_vel(q_ED,y);
 
 %% CFD
 %k omega
 F_KW = unstructured_reader('k-w Case 2',x_idx, y_idx,idx);
 q_KW = F_KW(X,Y);
-[thick_KW, middle_KW] = plot_colorplot(2,'k-w',q_KW);
+[thick_KW, middle_KW] = plot_colorplot(2,'k-w',q_KW, grade);
 
+%plot inlet velocity profiles
 figure();
 subplot(3,2,1)
-plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED);
+plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, 0);
 title('empirical data');
 
 subplot(3,2,2);
-plot_vels(x,F_KW, 'kw',q_KW, thick_KW, middle_KW);
+plot_vels(x,F_KW, 'kw',q_KW, thick_KW, middle_KW, 0);
 title('k - epsilon data');
 
 
 %% page 140 graphs
-plot_normalized_vels(x,F_KW,'k-w Profiles', q_KW, thick_KW, thick_KW);
-plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, thick_ED);
+plot_normalized_vels(x,F_KW,'k-w Profiles', q_KW, thick_KW, middle_KW);
+plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
 
 %% get data at outlet
 % x_outlet = 2.0319* ones(1, 1000);
