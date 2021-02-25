@@ -54,18 +54,21 @@ q_ED = F_ED(X_empirical,Y_empirical);
 %k omega
 F_KW = unstructured_reader('k-w Case 2',x_idx, y_idx,idx);
 q_KW = F_KW(X,Y);
-[thick_KW, middle_KW] = plot_colorplot(4,'k-w',q_KW);
+[thick_KW, middle_KW] = plot_colorplot(2,'k-w',q_KW);
 
 figure();
 subplot(3,2,1)
 plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED);
 title('empirical data');
 
-% figure();
+subplot(3,2,2);
+plot_vels(x,F_KW, 'kw',q_KW, thick_KW, middle_KW);
+title('k - epsilon data');
+
 
 %% page 140 graphs
 plot_normalized_vels(x,F_KW,'k-w Profiles', q_KW, thick_KW, thick_KW);
-
+plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, thick_ED);
 
 %% get data at outlet
 % x_outlet = 2.0319* ones(1, 1000);
