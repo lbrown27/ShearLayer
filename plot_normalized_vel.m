@@ -1,4 +1,4 @@
-function plot_normalized_vel(x,F, title1,q, thick, middle, x0)
+function plot_normalized_vel(x,F,q, thick, middle, x0)
 global N lower_speed upper_speed delta_U y
 [upper_speed,lower_speed] = find_avg_vel(q,y);
 delta_U = upper_speed - lower_speed;

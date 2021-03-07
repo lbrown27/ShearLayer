@@ -7,7 +7,7 @@ title(title1);
 set(h,'EdgeColor','none')
 colorbar();
 hold on;
-[upper_speed,lower_speed] = find_avg_vel(q,y);
-caxis([(lower_speed - 30) (upper_speed + 30)]);
+%[upper_speed,lower_speed] = find_avg_vel(q,y);
+caxis([min(min(q)) max(max(q))]);
 [thick, middle] = plotThicknesses(x,y,q, grade);
 end
