@@ -5,15 +5,15 @@ clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
     splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
 idx = 4; % for u velocity
-N = 500; % # grid points in each direction
-caseNum = 1;
+N = 250; % # grid points in each direction
+prompt = 'which case? ';
+caseNum = input(prompt);
 
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
 delta_U = upper_speed - lower_speed;
 addpath('Data');
-addpath('Data/Case 4 Empirical Data');
-%addpath('Data/Case 3 Empirical Data');
-%addpath('Data/Case 5 Empirical Data');
+myString = append('Data/Case ', num2str(caseNum), ' Empirical Data');
+addpath(myString);
 
 lower_length = .0762; % in m
 upper_length = .0508; % in m
@@ -32,65 +32,37 @@ T2 = readtable('FOV 2');
 T2 = table2array(T2);
 T3 = readtable('FOV 3');
 T3 = table2array(T3);
- %T4 = readtable('FOV 4');
- %T4 = table2array(T4);
-% T = [T;T2;T3;T4];
+if (caseNum == 1 || caseNum == 2 || caseNum == 5)
+    T4 = readtable('FOV 4');
+    T4 = table2array(T4);
+   T3 = [T3;T4]; 
+end
 T = [T;T2;T3];
 x_empirical = T(:,1)/1e3;
 y_empirical = T(:,2)/1e3;
 v_empirical = T(:,4);
-x_new = linspace(min(x_empirical), max(x_empirical), N); 
-y_new = linspace(min(y_empirical), max(y_empirical), N);
+x = linspace(min(x_empirical), max(x_empirical), N); 
+y = linspace(min(y_empirical), max(y_empirical), N);
 F_ED = scatteredInterpolant(x_empirical, y_empirical, v_empirical);
-[X_empirical,Y_empirical] = meshgrid(x_new,y_new);
-X = X_empirical;
-Y = Y_empirical;
-x = x_new;
-y = y_new;
-q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(1,'v velocity case 3',q_ED, grade);
-[upper, lower] = find_avg_vel(q_ED,y);
-
+[X,Y] = meshgrid(x,y);
+q_ED = F_ED(X,Y);
+[~, ~] = plot_colorplot(1,append('v velocity case ', num2str(caseNum)),q_ED, grade);
 
 u_empirical = T(:,7);
-x_new = linspace(min(x_empirical), max(x_empirical), N); 
-y_new = linspace(min(y_empirical), max(y_empirical), N);
 F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
-[X_empirical,Y_empirical] = meshgrid(x_new,y_new);
-X = X_empirical;
-Y = Y_empirical;
-x = x_new;
-y = y_new;
-q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(2,'Rexx case 3',q_ED, grade);
-[upper, lower] = find_avg_vel(q_ED,y);
+q_ED = F_ED(X,Y);
+[~, ~] = plot_colorplot(2,append('Rexx case ', num2str(caseNum)),q_ED, grade);
 
 u_empirical = T(:,3);
-x_new = linspace(min(x_empirical), max(x_empirical), N); 
-y_new = linspace(min(y_empirical), max(y_empirical), N);
 F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
-[X_empirical,Y_empirical] = meshgrid(x_new,y_new);
-X = X_empirical;
-Y = Y_empirical;
-x = x_new;
-y = y_new;
-q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(4,'U velocity case 3',q_ED, grade);
-[upper, lower] = find_avg_vel(q_ED,y);
+q_ED = F_ED(X,Y);
+[EMP.thick, EMP.middle] = plot_colorplot(4,append('u velocity case ', num2str(caseNum)),q_ED, grade);
 
 
 u_empirical = T(:,10);
-x_new = linspace(min(x_empirical), max(x_empirical), N); 
-y_new = linspace(min(y_empirical), max(y_empirical), N);
 F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
-[X_empirical,Y_empirical] = meshgrid(x_new,y_new);
-X = X_empirical;
-Y = Y_empirical;
-x = x_new;
-y = y_new;
-q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(3,'Rexy case 3',q_ED, grade);
-[upper, lower] = find_avg_vel(q_ED,y);
+q_ED = F_ED(X,Y);
+[~, ~] = plot_colorplot(3,append('Rexy case ', num2str(caseNum)),q_ED, grade);
 
 % %% CFD
 % %k omega
@@ -111,7 +83,7 @@ q_ED = F_ED(X_empirical,Y_empirical);
 % 
 % %% page 140 graphs
  %plot_normalized_vels(x,F_KW,'k-e Profiles', q_KW, thick_KW, middle_KW);
- plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
+ %plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
 % 
 % %% get data at outlet
 % % x_outlet = 2.0319* ones(1, 1000);
