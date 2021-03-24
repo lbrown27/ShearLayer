@@ -4,7 +4,6 @@ close all;
 clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
     splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
-idx = 4; % for u velocity
 N = 250; % # grid points in each direction
 prompt = 'which case? ';
 caseNum = input(prompt);
@@ -19,9 +18,6 @@ lower_length = .0762; % in m
 upper_length = .0508; % in m
 x = linspace(0,.762, N);
 y = linspace(-lower_length, upper_length, N);
-[X,Y] = meshgrid(x,y);
-x_idx = 2;
-y_idx = 3;
 grade = 50;
 
 %=============================Setup Complete===============================
@@ -35,34 +31,35 @@ T3 = table2array(T3);
 if (caseNum == 1 || caseNum == 2 || caseNum == 5)
     T4 = readtable('FOV 4');
     T4 = table2array(T4);
-   T3 = [T3;T4]; 
+    T3 = [T3;T4];
 end
 T = [T;T2;T3];
-x_empirical = T(:,1)/1e3;
-y_empirical = T(:,2)/1e3;
-v_empirical = T(:,4);
-x = linspace(min(x_empirical), max(x_empirical), N); 
-y = linspace(min(y_empirical), max(y_empirical), N);
-F_ED = scatteredInterpolant(x_empirical, y_empirical, v_empirical);
+x_emp = T(:,1)/1e3;
+y_emp = T(:,2)/1e3;
+dat = T(:,4);
+x = linspace(min(x_emp), max(x_emp), N); % you have to resize otherwise the matrix created will be too large for matlab.
+y = linspace(min(y_emp), max(y_emp), N);
 [X,Y] = meshgrid(x,y);
-q_ED = F_ED(X,Y);
-[~, ~] = plot_colorplot(1,append('v velocity case ', num2str(caseNum)),q_ED, grade);
-
-u_empirical = T(:,7);
-F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
-q_ED = F_ED(X,Y);
-[~, ~] = plot_colorplot(2,append('Rexx case ', num2str(caseNum)),q_ED, grade);
-
-u_empirical = T(:,3);
-F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
-q_ED = F_ED(X,Y);
-[EMP.thick, EMP.middle] = plot_colorplot(4,append('u velocity case ', num2str(caseNum)),q_ED, grade);
-
-
-u_empirical = T(:,10);
-F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
-q_ED = F_ED(X,Y);
-[~, ~] = plot_colorplot(3,append('Rexy case ', num2str(caseNum)),q_ED, grade);
+[EMP] = get_FOV_Data(x_emp, y_emp, T);
+% F = scatteredInterpolant(x_empirical, y_empirical, dat);
+% EMP.v_mat = F(X,Y);
+ [~, ~] = plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP.u_mat, grade);
+% 
+% dat = T(:,7);
+% F = scatteredInterpolant(x_empirical, y_empirical, dat);
+% EMP.Rexx_mat = F(X,Y);
+% [~, ~] = plot_colorplot(2,append('Rexx case ', num2str(caseNum)),EMP.Rexx_mat, grade);
+% 
+% dat = T(:,3);
+% F = scatteredInterpolant(x_empirical, y_empirical, dat);
+% EMP.u_mat = F(X,Y);
+% [EMP.thick, EMP.middle] = plot_colorplot(4,append('u velocity case ', num2str(caseNum)),EMP.u_mat, grade);
+% 
+% 
+% dat = T(:,10);
+% F = scatteredInterpolant(x_empirical, y_empirical, dat);
+% EMP.Rexy_mat = F(X,Y);
+% [~, ~] = plot_colorplot(3,append('Rexy case ', num2str(caseNum)),EMP.Rexy_mat, grade);
 
 % %% CFD
 % %k omega
@@ -75,21 +72,21 @@ q_ED = F_ED(X,Y);
 % subplot(3,2,1)
 % plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
 % title('empirical data');
-% 
+%
 % subplot(3,2,2);
 % plot_vels(x,F_KW, 'kw',q_KW, thick_KW, middle_KW, 0.01);
 % title('k - epsilon data');
-% 
-% 
+%
+%
 % %% page 140 graphs
- %plot_normalized_vels(x,F_KW,'k-e Profiles', q_KW, thick_KW, middle_KW);
- %plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
-% 
+%plot_normalized_vels(x,F_KW,'k-e Profiles', q_KW, thick_KW, middle_KW);
+%plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
+%
 % %% get data at outlet
 % % x_outlet = 2.0319* ones(1, 1000);
 % % y_outlet = linspace(-.13335, .10795, 1000);
 % % q_outlet = F_KW(x_outlet, y_outlet);
-% 
+%
 % % figure();
 % % plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.007);
 % % title('old');
