@@ -11,7 +11,7 @@ caseNum = 1;
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
 delta_U = upper_speed - lower_speed;
 addpath('Data');
-addpath('Data/Case 5 Empirical Data');
+addpath('Data/Case 4 Empirical Data');
 %addpath('Data/Case 3 Empirical Data');
 %addpath('Data/Case 5 Empirical Data');
 
@@ -32,23 +32,23 @@ T2 = readtable('FOV 2');
 T2 = table2array(T2);
 T3 = readtable('FOV 3');
 T3 = table2array(T3);
- T4 = readtable('FOV 4');
- T4 = table2array(T4);
- T = [T;T2;T3;T4];
-%T = [T;T2;T3];
+ %T4 = readtable('FOV 4');
+ %T4 = table2array(T4);
+% T = [T;T2;T3;T4];
+T = [T;T2;T3];
 x_empirical = T(:,1)/1e3;
 y_empirical = T(:,2)/1e3;
-u_empirical = T(:,4);
+v_empirical = T(:,4);
 x_new = linspace(min(x_empirical), max(x_empirical), N); 
 y_new = linspace(min(y_empirical), max(y_empirical), N);
-F_ED = scatteredInterpolant(x_empirical, y_empirical, u_empirical);
+F_ED = scatteredInterpolant(x_empirical, y_empirical, v_empirical);
 [X_empirical,Y_empirical] = meshgrid(x_new,y_new);
 X = X_empirical;
 Y = Y_empirical;
 x = x_new;
 y = y_new;
 q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(1,'v velocity',q_ED, grade);
+[thick_ED, middle_ED] = plot_colorplot(1,'v velocity case 3',q_ED, grade);
 [upper, lower] = find_avg_vel(q_ED,y);
 
 
@@ -62,7 +62,7 @@ Y = Y_empirical;
 x = x_new;
 y = y_new;
 q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(2,'Rexx',q_ED, grade);
+[thick_ED, middle_ED] = plot_colorplot(2,'Rexx case 3',q_ED, grade);
 [upper, lower] = find_avg_vel(q_ED,y);
 
 u_empirical = T(:,3);
@@ -75,7 +75,7 @@ Y = Y_empirical;
 x = x_new;
 y = y_new;
 q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(4,'U velocity',q_ED, grade);
+[thick_ED, middle_ED] = plot_colorplot(4,'U velocity case 3',q_ED, grade);
 [upper, lower] = find_avg_vel(q_ED,y);
 
 
@@ -89,7 +89,7 @@ Y = Y_empirical;
 x = x_new;
 y = y_new;
 q_ED = F_ED(X_empirical,Y_empirical);
-[thick_ED, middle_ED] = plot_colorplot(3,'Rexy',q_ED, grade);
+[thick_ED, middle_ED] = plot_colorplot(3,'Rexy case 3',q_ED, grade);
 [upper, lower] = find_avg_vel(q_ED,y);
 
 % %% CFD
@@ -110,8 +110,8 @@ q_ED = F_ED(X_empirical,Y_empirical);
 % 
 % 
 % %% page 140 graphs
-% plot_normalized_vels(x,F_KW,'k-e Profiles', q_KW, thick_KW, middle_KW);
-% plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
+ %plot_normalized_vels(x,F_KW,'k-e Profiles', q_KW, thick_KW, middle_KW);
+ plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
 % 
 % %% get data at outlet
 % % x_outlet = 2.0319* ones(1, 1000);
