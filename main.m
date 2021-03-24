@@ -36,41 +36,23 @@ end
 T = [T;T2;T3];
 x_emp = T(:,1)/1e3;
 y_emp = T(:,2)/1e3;
-dat = T(:,4);
 x = linspace(min(x_emp), max(x_emp), N); % you have to resize otherwise the matrix created will be too large for matlab.
 y = linspace(min(y_emp), max(y_emp), N);
 [X,Y] = meshgrid(x,y);
 [EMP] = get_FOV_Data(x_emp, y_emp, T);
-% F = scatteredInterpolant(x_empirical, y_empirical, dat);
-% EMP.v_mat = F(X,Y);
- [~, ~] = plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP.u_mat, grade);
-% 
-% dat = T(:,7);
-% F = scatteredInterpolant(x_empirical, y_empirical, dat);
-% EMP.Rexx_mat = F(X,Y);
-% [~, ~] = plot_colorplot(2,append('Rexx case ', num2str(caseNum)),EMP.Rexx_mat, grade);
-% 
-% dat = T(:,3);
-% F = scatteredInterpolant(x_empirical, y_empirical, dat);
-% EMP.u_mat = F(X,Y);
-% [EMP.thick, EMP.middle] = plot_colorplot(4,append('u velocity case ', num2str(caseNum)),EMP.u_mat, grade);
-% 
-% 
-% dat = T(:,10);
-% F = scatteredInterpolant(x_empirical, y_empirical, dat);
-% EMP.Rexy_mat = F(X,Y);
-% [~, ~] = plot_colorplot(3,append('Rexy case ', num2str(caseNum)),EMP.Rexy_mat, grade);
 
-% %% CFD
-% %k omega
-% F_KW = unstructured_reader('k-e Case 1',x_idx, y_idx,idx);
-% q_KW = F_KW(X,Y);
-% [thick_KW, middle_KW] = plot_colorplot(2,'k-e',q_KW, grade);
-% %find_negative_colorplot_vals(q_KW);
-% %plot inlet velocity profiles
-% figure();
-% subplot(3,2,1)
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
+ %[~, ~] = plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP.u, grade);
+
+%% CFD
+%k omega
+F = unstructured_reader('k-e Case 1',x_idx, y_idx,idx);
+q_KW = F_KW(X,Y);
+[thick_KW, middle_KW] = plot_colorplot(2,'k-e',q_KW, grade);
+%find_negative_colorplot_vals(q_KW);
+%plot inlet velocity profiles
+figure();
+subplot(3,2,1)
+plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
 % title('empirical data');
 %
 % subplot(3,2,2);

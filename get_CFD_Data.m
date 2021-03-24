@@ -1,4 +1,4 @@
-function [STRUCT] = get_FOV_Data(x_empirical, y_empirical, T)
+function STRUCT = get_CFD_Data(x_empirical, y_empirical, T)
 global X Y
 dim = size(T);
 len = dim(2);
