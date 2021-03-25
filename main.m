@@ -1,5 +1,4 @@
 %% setup
-clear all;
 close all;
 clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
@@ -7,7 +6,6 @@ global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
 N = 250; % # grid points in each direction
 prompt = 'which case? ';
 caseNum = input(prompt);
-
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
 delta_U = upper_speed - lower_speed;
 addpath('Data');
@@ -16,43 +14,27 @@ addpath(myString);
 
 lower_length = .0762; % in m
 upper_length = .0508; % in m
-x = linspace(0,.762, N);
+test_section_length = .762; % in m
+x = linspace(0,test_section_length, N);
 y = linspace(-lower_length, upper_length, N);
 grade = 50;
 
 %=============================Setup Complete===============================
-%% experimental data
-T = readtable('FOV 1');
-T = table2array(T);
-T2 = readtable('FOV 2');
-T2 = table2array(T2);
-T3 = readtable('FOV 3');
-T3 = table2array(T3);
-if (caseNum == 1 || caseNum == 2 || caseNum == 5)
-    T4 = readtable('FOV 4');
-    T4 = table2array(T4);
-    T3 = [T3;T4];
+Q = read_raw_EMP_data(caseNum);
+if (exist('EMP')== 0)
+    EMP= struct;
 end
-T = [T;T2;T3];
-x_emp = T(:,1)/1e3;
-y_emp = T(:,2)/1e3;
-x = linspace(min(x_emp), max(x_emp), N); % you have to resize otherwise the matrix created will be too large for matlab.
-y = linspace(min(y_emp), max(y_emp), N);
-[X,Y] = meshgrid(x,y);
-[EMP] = get_FOV_Data(x_emp, y_emp, T);
 
- %[~, ~] = plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP.u, grade);
+[EMP] = get_FOV_Data(x_emp, y_emp, Q, EMP);
+
+%[~, ~] = plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP.u, grade);
 
 %% CFD
 %k omega
-F = unstructured_reader('k-e Case 1',x_idx, y_idx,idx);
-q_KW = F_KW(X,Y);
-[thick_KW, middle_KW] = plot_colorplot(2,'k-e',q_KW, grade);
-%find_negative_colorplot_vals(q_KW);
-%plot inlet velocity profiles
+KW_4 = get_CFD_Data('k-w Case 4', KW_4);
 figure();
 subplot(3,2,1)
-plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
+%plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
 % title('empirical data');
 %
 % subplot(3,2,2);
