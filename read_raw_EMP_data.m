@@ -1,8 +1,8 @@
 function Q = read_raw_EMP_data(caseNum)
-global x y X Y N
+global x y X Y N x_emp y_emp
 for j = 1:5
 myString = append('Data/Case ', num2str(j), ' Empirical Data');
-addpath(myString)
+addpath(myString);
 myString = append('Case ', num2str(j), ' Empirical Data/FOV ',num2str(1));
 T = readtable(myString);
 T = table2array(T);
