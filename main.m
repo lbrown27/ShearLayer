@@ -6,31 +6,39 @@ global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
 N = 250; % # grid points in each direction
 caseNum = 4;
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
-delta_U = upper_speed - lower_speed;
+delta_U = upper_speed - lower_speed; %% revise these lines
 lower_length = .0762; % in m
 upper_length = .0508; % in m
 test_section_length = .762; % in m
 x = linspace(0,test_section_length, N);
 y = linspace(-lower_length, upper_length, N);
 grade = 50;
-
 %=============================Setup Complete===============================
+
+% read the Empirical (EMP) FOV data
 Q = read_raw_EMP_data(caseNum);
 if (exist('EMP')== 0)
     EMP= struct;
 end
-%[EMP] = get_FOV_Data(x, y, Q, EMP);
+[EMP] = get_FOV_Data(Q, EMP);
 
-%[~, ~] = plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP.u, grade);
+plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP(1), grade);
 
-%% CFD
+%% Load CFD Data
 %k omega
-if (exist('KW_4')== 0)
+if (exist('KW')== 0)
     KW= struct;
 end
 KW = get_CFD_Data('k-w', KW);
-figure();
-subplot(3,2,1)
+
+if (exist('KE')== 0)
+    KE = struct;
+end
+KE = get_CFD_Data('k-e', KE);
+
+%%
+% figure();
+% subplot(3,2,1)
 %plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
 % title('empirical data');
 %

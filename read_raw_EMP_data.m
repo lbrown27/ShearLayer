@@ -1,5 +1,4 @@
 function Q = read_raw_EMP_data(caseNum)
-global x y X Y N x_emp y_emp
 for j = 1:5
 myString = append('Data/Case ', num2str(j), ' Empirical Data');
 addpath(myString);
@@ -20,11 +19,6 @@ if (caseNum == 1 || caseNum == 2 || caseNum == 5)
 end
 T = [T;T2;T3];
 T = T(:,1:10);
-x_emp = T(:,1)/1e3;
-y_emp = T(:,2)/1e3;
-x = linspace(min(x_emp), max(x_emp), N); % resize otherwise matrix created will be too large for matlab.
-y = linspace(min(y_emp), max(y_emp), N);
-[X,Y] = meshgrid(x,y);
 names = ["case_1","case_2","case_3","case_4","case_5"];
 names = cellstr(names);
 Q.(names{j}) = T;
