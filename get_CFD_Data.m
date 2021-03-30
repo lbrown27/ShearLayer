@@ -1,7 +1,6 @@
 function STRUCT = get_CFD_Data(turb_method,StructName, params)
 global X Y N
-names = ["x","y","pressure","density"...
-    "velocity_magnitude","u","v"];
+names = ["x","y","pressure","density","u","v"];
 names = [names,params];
 indices = data_key(names);
 names = cellstr(names);
@@ -22,17 +21,26 @@ for j = 1:5
         fprintf(' file found\n');
         StructName(j).exists = 1; % make sure that the struct exists before doing stuff
         if (isfield(StructName(j),(names{1})) == 0)
-                F = unstructured_reader(filename,x_idx, y_idx,indices(1));
-                STRUCT(j).(names{1}) = F(X,Y);
+            fprintf('not a field.\n');
+            F = unstructured_reader(filename,x_idx, y_idx,indices(1));
+            STRUCT(j).(names{1}) = F(X,Y);
+        else
+            STRUCT(j).(names{1}) = StructName(j).(names{1});
         end
         if (isfield(StructName(j),(names{2})) == 0)
-                F = unstructured_reader(filename,x_idx, y_idx,indices(2));
-                STRUCT(j).(names{2}) = F(X,Y);
+            fprintf('not a field.\n');
+            F = unstructured_reader(filename,x_idx, y_idx,indices(2));
+            STRUCT(j).(names{2}) = F(X,Y);
+        else
+            STRUCT(j).(names{2}) = StructName(j).(names{2});
         end
         for i = 3:length(indices)
             if (isfield(StructName(j),(names{i})) == 0)
+                fprintf('not a field.\n');
                 F = unstructured_reader(filename,x_idx, y_idx,indices(i));
                 STRUCT(j).(names{i}) = F(STRUCT(j).x,STRUCT(j).y);
+            else
+                STRUCT(j).(names{i}) = StructName(j).(names{i});
             end
             %[STRUCT.thick, STRUCT.middle] = plot_colorplot(2,filename,q, 50);%last
             %num is the grade

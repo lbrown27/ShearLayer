@@ -3,7 +3,7 @@ close all;
 clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
     splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
-N = 200; % # grid points in each direction
+N = 10; % # grid points in each direction
 caseNum = 4;
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
 delta_U = upper_speed - lower_speed; %% revise these lines
@@ -20,6 +20,7 @@ grade = 50;
 Q = read_raw_EMP_data(caseNum);
 if (exist('EMP')== 0)
     EMP= struct;
+    fprintf('Emp doesnt exist!');
 end
 [EMP] = get_FOV_Data(Q, EMP);
 plot_colorplot(append('u velocity case ', num2str(caseNum)),EMP, grade, caseNum);
@@ -31,8 +32,11 @@ plot_colorplot(append('u velocity case ', num2str(caseNum)),EMP, grade, caseNum)
 % KW = get_CFD_Data('k-w', KW,[]);
 if (exist('KE')== 0)
     KE = struct;
+    fprintf('KE doesnt exist!');
 end
 KE = get_CFD_Data('k-e', KE,[]);
+
+fprintf("done");
 % if (exist('SA')== 0)
 %     SA = struct;
 % end
@@ -118,7 +122,7 @@ KE = get_CFD_Data('k-e', KE,[]);
 
 
 %% testing
-caseNum = 1;
-plot_colorplot(append('ke case ', num2str(caseNum)),KE, grade, caseNum);
+%caseNum = 1;
+%plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum);
 
 %comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
