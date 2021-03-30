@@ -3,7 +3,7 @@ close all;
 clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
     splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
-N = 250; % # grid points in each direction
+N = 200; % # grid points in each direction
 caseNum = 4;
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
 delta_U = upper_speed - lower_speed; %% revise these lines
@@ -12,6 +12,7 @@ upper_length = .0508; % in m
 test_section_length = .762; % in m
 x = linspace(0,test_section_length, N);
 y = linspace(-lower_length, upper_length, N);
+[X,Y] = meshgrid(x,y);
 grade = 50;
 %=============================Setup Complete===============================
 
@@ -21,21 +22,25 @@ if (exist('EMP')== 0)
     EMP= struct;
 end
 [EMP] = get_FOV_Data(Q, EMP);
-
-plot_colorplot(1,append('u velocity case ', num2str(caseNum)),EMP(1), grade);
+plot_colorplot(append('u velocity case ', num2str(caseNum)),EMP, grade, caseNum);
 
 %% Load CFD Data
-%k omega
-if (exist('KW')== 0)
-    KW= struct;
-end
-KW = get_CFD_Data('k-w', KW);
-
+% if (exist('KW')== 0)
+%     KW = struct;
+% end
+% KW = get_CFD_Data('k-w', KW,[]);
 if (exist('KE')== 0)
     KE = struct;
 end
-KE = get_CFD_Data('k-e', KE);
-
+KE = get_CFD_Data('k-e', KE,[]);
+% if (exist('SA')== 0)
+%     SA = struct;
+% end
+% SA = get_CFD_Data('SA', SA,[]);
+% if (exist('RS')== 0)
+%     RS = struct;
+% end
+% RS = get_CFD_Data('RS', RS,[]);
 %%
 % figure();
 % subplot(3,2,1)
@@ -110,3 +115,10 @@ KE = get_CFD_Data('k-e', KE);
 % clf;
 % plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .3);
 % title('7');
+
+
+%% testing
+caseNum = 1;
+plot_colorplot(append('ke case ', num2str(caseNum)),KE, grade, caseNum);
+
+%comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
