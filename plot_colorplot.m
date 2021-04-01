@@ -1,5 +1,5 @@
 % grade is the thickness u wanna see (ex: 90 or 95)
-function plot_colorplot(title1,plotvector, grade,caseNum, parameter) 
+function plot_colorplot(title1,plotvector,grade, caseNum, parameter)
 global upper_speed lower_speed x y
 % % subplot(3,2,j);
 %parameter = cellstr(parameter);

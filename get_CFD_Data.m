@@ -1,6 +1,7 @@
 function STRUCT = get_CFD_Data(turb_method,StructName,EMP,params)
 global N
 names = ["x","y","pressure","density","u","v"];
+u_name_idx = 5;
 names = [names,params];
 indices = data_key(names);
 names = cellstr(names);
@@ -9,11 +10,6 @@ y_idx = 3;
 addpath('Data');
 STRUCT = repmat(struct,5,1);
 
-%% this section just copied and pasted in to test something
-% x = linspace(0,.762,N);
-% y = linspace(-.0762,.0508,N);
-% [X,Y] = meshgrid(x,y);
-%%
 for j = 1:5
     filename = append('Data/',turb_method, ' Case ', num2str(j));
     fprintf(filename);
@@ -45,8 +41,12 @@ for j = 1:5
                 fprintf('not a field.\n');
                 F = unstructured_reader(filename,x_idx, y_idx,indices(i));
                 STRUCT(j).(names{i}) = F(STRUCT(j).X,STRUCT(j).Y);
+                if (i == u_name_idx)
+                    STRUCT(j).F_u = F;
+                end
             else
                 STRUCT(j).(names{i}) = StructName(j).(names{i});
+                STRUCT(j).F_u = StructName(j).F_u;
             end
             %[STRUCT.thick, STRUCT.middle] = plot_colorplot(2,filename,q, 50);%last
             %num is the grade

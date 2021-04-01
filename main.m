@@ -1,18 +1,12 @@
 %% setup
 close all;
 clc;
-global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
-    splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL x y
-N = 100; % # grid points in each direction
+global N 
+N = 70; % # grid points in each direction
 caseNum = 4;
-[upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
-delta_U = upper_speed - lower_speed; %% revise these lines
 lower_length = .0762; % in m
 upper_length = .0508; % in m
 test_section_length = .762; % in m
-x = linspace(0,test_section_length, N);
-y = linspace(-lower_length, upper_length, N);
-[X,Y] = meshgrid(x,y);
 grade = 50;
 %=============================Setup Complete===============================
 
@@ -36,7 +30,6 @@ if (exist('KE')== 0)
 end
 KE = get_CFD_Data('k-e', KE,EMP,[]);
 
-fprintf("done");
 if (exist('SA')== 0)
     SA = struct;
 end
@@ -142,9 +135,15 @@ figure();
 comparison_view("u", EMP, KW,KE,SA,RS,'EMP');
 %comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
 %% thickness
+figure();
+grade = 90;
+plot_colorplot("e",KW(1),grade, 1, 'u')
+hold on;
+KW = plotThicknesses(KW,1,grade);
+figure();
+[profile, eta] = plot_normalized_vels("normalized vels", KW, 1,grade);
+KW(1).normed_profiles = profile;
+KW(1).eta = eta;
 
-[KW] = shearLayerThickness(KW, 90);
-figure();
-plot(KW(1).x,KW(1).y(KW(1).yup));
-figure();
-plot(KW(1).x,KW(1).y(KW(1).ydown));
+
+

@@ -21,11 +21,15 @@ for j = 1:5
         if (isfield(StructName(j),(names{i})) == 0)
             
             F = scatteredInterpolant(mat(:,1), mat(:,2), mat(:,i));
-            
             STRUCT(j).(names{i}) = F(X,Y);
-            
+            if (i == 3)
+                STRUCT(j).F_u = F;
+            end
         else
             STRUCT(j).(names{i}) = StructName(j).(names{i});
+            if (i == 3)
+                STRUCT(j).F_u = StructName(j).F_u;
+            end
         end
     end
 end

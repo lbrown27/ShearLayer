@@ -5,7 +5,6 @@ function F = unstructured_reader(fname,x_idx, y_idx, idx)
 T = readtable(fname);
 A = table2array(T);
 Asize = size(A);
-nrows = Asize(1);
 
 %%
 x = A(:,x_idx);
