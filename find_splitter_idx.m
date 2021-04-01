@@ -1,4 +1,6 @@
-function [] = find_splitter_idx(y)
+function [STRUCT] = find_splitter_idx(STRUCT)
 global splitter_idx
-[splitter,splitter_idx]= min(abs(y));
+for i = 1:5
+    [~,STRUCT(i).splitter_idx]= min(abs(STRUCT(i).y));
+end
 end

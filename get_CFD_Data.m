@@ -1,5 +1,5 @@
 function STRUCT = get_CFD_Data(turb_method,StructName,EMP,params)
-global X Y N
+global N
 names = ["x","y","pressure","density","u","v"];
 names = [names,params];
 indices = data_key(names);
@@ -27,8 +27,8 @@ for j = 1:5
             A = table2array(T);
             x = A(:,x_idx);
             y = A(:,y_idx);
-            x_grid = linspace(0,max(max(EMP(1).X)),N);
-            y_grid = linspace(min(min(EMP(1).Y)),max(max(EMP(1).Y)),N);
+            x_grid = linspace(0,max(EMP(1).x),N);
+            y_grid = linspace(min(EMP(1).y),max(EMP(1).y),N);
             [X,Y] = meshgrid(x_grid,y_grid);
             STRUCT(j).x = x_grid;
             STRUCT(j).X = X;

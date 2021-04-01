@@ -1,8 +1,9 @@
-function plot_normalized_vel(x,F,q, thick, middle, x0)
-global N lower_speed upper_speed delta_U y
-[upper_speed,lower_speed] = find_avg_vel(q,y);
+function plot_normalized_vel(STRUCT,x,F,q, thick, middle, x0)
+global N y
+[upper_speed, lower_speed, ~, ~, ~, ~] = getInfo(caseNum);
+%[upper_speed,lower_speed] = find_avg_vel(q,y);
 delta_U = upper_speed - lower_speed;
-[val, x_idx] = min(abs(x-x0)); % find x val closest to each x point needed
+[val, x_idx] = min(abs(STRUCT(caseNum).x-x0)); % find x val closest to each x point needed
 eta = linspace(-1.2,1.2, N);
 b0 = thick(x_idx);
 y0 = middle(x_idx);

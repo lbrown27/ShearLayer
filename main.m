@@ -2,7 +2,7 @@
 close all;
 clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
-    splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
+    splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL x y
 N = 100; % # grid points in each direction
 caseNum = 4;
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
@@ -23,13 +23,13 @@ if (exist('EMP')== 0)
     fprintf('Emp doesnt exist!');
 end
 [EMP] = get_FOV_Data(Q, EMP);
-plot_colorplot(append('u velocity case ', num2str(caseNum)),EMP, grade, caseNum);
+plot_colorplot(append('u velocity empirical case ', num2str(caseNum)),EMP, grade, caseNum,'u');
 
 %% Load CFD Data
-% if (exist('KW')== 0)
-%     KW = struct;
-% end
-% KW = get_CFD_Data('k-w', KW,[]);
+if (exist('KW')== 0)
+    KW = struct;
+end
+KW = get_CFD_Data('k-w', KW,EMP,[]);
 if (exist('KE')== 0)
     KE = struct;
     fprintf('KE doesnt exist!');
@@ -37,14 +37,20 @@ end
 KE = get_CFD_Data('k-e', KE,EMP,[]);
 
 fprintf("done");
-% if (exist('SA')== 0)
-%     SA = struct;
-% end
-% SA = get_CFD_Data('SA', SA,[]);
-% if (exist('RS')== 0)
-%     RS = struct;
-% end
-% RS = get_CFD_Data('RS', RS,[]);
+if (exist('SA')== 0)
+    SA = struct;
+end
+SA = get_CFD_Data('SA', SA,EMP,[]);
+if (exist('RS')== 0)
+    RS = struct;
+end
+RS = get_CFD_Data('RS', RS,EMP,[]);
+
+RS = find_splitter_idx(RS);
+KE = find_splitter_idx(KE);
+KW = find_splitter_idx(KW);
+SA = find_splitter_idx(SA);
+EMP = find_splitter_idx(EMP);
 %%
 % figure();
 % subplot(3,2,1)
@@ -123,6 +129,22 @@ fprintf("done");
 %% testing
 caseNum = 1;
 figure();
-plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum);
-
+plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum, 'u');
+figure();
+comparison_view("u", EMP, KW,KE,SA,RS,'KW');
+figure();
+comparison_view("u", EMP, KW,KE,SA,RS,'KE');
+figure();
+comparison_view("u", EMP, KW,KE,SA,RS,'SA');
+figure();
+comparison_view("u", EMP, KW,KE,SA,RS,'RS');
+figure();
+comparison_view("u", EMP, KW,KE,SA,RS,'EMP');
 %comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
+%% thickness
+
+[KW] = shearLayerThickness(KW, 90);
+figure();
+plot(KW(1).x,KW(1).y(KW(1).yup));
+figure();
+plot(KW(1).x,KW(1).y(KW(1).ydown));
