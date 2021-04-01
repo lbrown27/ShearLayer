@@ -11,7 +11,6 @@ nrows = Asize(1);
 x = A(:,x_idx);
 y = A(:,y_idx);
 q = A(:,idx);
-min(q)
 F = scatteredInterpolant(x,y,q);
 
 end

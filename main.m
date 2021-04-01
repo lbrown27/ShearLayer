@@ -3,7 +3,7 @@ close all;
 clc;
 global upper_speed lower_speed N splitter_idx  delta_U top_wall_BL ...
     splitter_plate_top_BL splitter_plate_bottom_BL bottom_wall_BL X Y x y
-N = 10; % # grid points in each direction
+N = 100; % # grid points in each direction
 caseNum = 4;
 [upper_speed, lower_speed, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL, bottom_wall_BL] = getInfo(caseNum);
 delta_U = upper_speed - lower_speed; %% revise these lines
@@ -34,7 +34,7 @@ if (exist('KE')== 0)
     KE = struct;
     fprintf('KE doesnt exist!');
 end
-KE = get_CFD_Data('k-e', KE,[]);
+KE = get_CFD_Data('k-e', KE,EMP,[]);
 
 fprintf("done");
 % if (exist('SA')== 0)
@@ -120,9 +120,9 @@ fprintf("done");
 % plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .3);
 % title('7');
 
-
 %% testing
-%caseNum = 1;
-%plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum);
+caseNum = 1;
+figure();
+plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum);
 
 %comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
