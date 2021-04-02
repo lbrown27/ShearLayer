@@ -16,27 +16,28 @@ if (exist('EMP')== 0)
     fprintf('Emp doesnt exist!');
 end
 [EMP] = get_FOV_Data(Q, EMP);
+grade = 90;
 plot_colorplot(append('u velocity empirical case ', num2str(caseNum)),EMP, grade, caseNum,'u');
 
 %% Load CFD Data
 if (exist('KW')== 0)
     KW = struct;
 end
-KW = get_CFD_Data('k-w', KW,EMP,[]);
+KW = get_CFD_Data('k-w', KW,EMP,[],max(EMP(1).x));
 if (exist('KE')== 0)
     KE = struct;
     fprintf('KE doesnt exist!');
 end
-KE = get_CFD_Data('k-e', KE,EMP,[]);
+KE = get_CFD_Data('k-e', KE,EMP,[],max(EMP(1).x));
 
 if (exist('SA')== 0)
     SA = struct;
 end
-SA = get_CFD_Data('SA', SA,EMP,[]);
+SA = get_CFD_Data('SA', SA,EMP,[], max(EMP(1).x));
 if (exist('RS')== 0)
     RS = struct;
 end
-RS = get_CFD_Data('RS', RS,EMP,[]);
+RS = get_CFD_Data('RS', RS,EMP,[], max(EMP(1).x));
 
 RS = find_splitter_idx(RS);
 KE = find_splitter_idx(KE);
@@ -107,3 +108,14 @@ comparison_view('u', EMP, KW,KE,SA,RS,2);
 comparison_view('u', EMP, KW,KE,SA,RS,3);
 comparison_view('u', EMP, KW,KE,SA,RS,4);
 comparison_view('u', EMP, KW,KE,SA,RS,5);
+
+%% growth rate calculations
+clc;
+if (exist('KW_XL')== 0)
+    KW_XL = struct;
+end
+
+KW_XL = get_expanded_CFD_data('k-w',KW_XL,EMP,[], .33);
+KW_XL = find_splitter_idx(KW_XL);
+KW_XL = shearLayerThickness(KW_XL,90);
+frog = calculate_growth_rate(KW_XL);

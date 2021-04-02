@@ -1,7 +1,7 @@
-function STRUCT = get_CFD_Data(turb_method,StructName,EMP,params, max_x)
+function STRUCT = get_expanded_CFD_data(turb_method,StructName,EMP,params, max_x)
 global N
-names = ["x","y","pressure","density","u","v"];
-u_name_idx = 5;
+names = ["x","y","u"];
+u_name_idx = 3;
 names = [names,params];
 indices = data_key(names);
 names = cellstr(names);
@@ -9,7 +9,6 @@ x_idx = 2;
 y_idx = 3;
 addpath('Data');
 STRUCT = repmat(struct,5,1);
-
 for j = 1:5
     filename = append('Data/',turb_method, ' Case ', num2str(j));
     fprintf(filename);
@@ -36,23 +35,20 @@ for j = 1:5
             STRUCT(j).y = StructName(j).y;
             STRUCT(j).Y = StructName(j).Y;
         end
-        for i = 3:length(indices)
-            if (isfield(StructName(j),(names{i})) == 0)
+       
+            if (isfield(StructName(j),'u') == 0)
                 fprintf('not a field.\n');
-                F = unstructured_reader(filename,x_idx, y_idx,indices(i));
-                STRUCT(j).(names{i}) = F(STRUCT(j).X,STRUCT(j).Y);
-                if (i == u_name_idx)
-                    STRUCT(j).F_u = F;
-                end
+                F = unstructured_reader(filename,x_idx, y_idx,indices(u_name_idx));
+                STRUCT(j).u = F(STRUCT(j).X,STRUCT(j).Y);
             else
-                STRUCT(j).(names{i}) = StructName(j).(names{i});
-                STRUCT(j).F_u = StructName(j).F_u;
+                STRUCT(j).u = StructName(j).u;
             end
             %[STRUCT.thick, STRUCT.middle] = plot_colorplot(2,filename,q, 50);%last
             %num is the grade
-        end
+       
     else
         fprintf(' not a file\n');
     end
 end
+
 end

@@ -1,6 +1,6 @@
 function [normalized_vel, eta] = plot_normalized_vel(STRUCT, x0,caseNum,grade)
 global N 
-[upper_speed, lower_speed, ~, ~, ~, ~] = getInfo(caseNum);
+[upper_speed, lower_speed, ~, ~, ~, ~,~,~] = getInfo(caseNum);
 %[upper_speed,lower_speed] = find_avg_vel(q,y);
 delta_U = upper_speed - lower_speed;
 [~, x_idx] = min(abs(STRUCT(caseNum).x-x0)); % find x val closest to each x point needed
