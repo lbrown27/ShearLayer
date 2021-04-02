@@ -1,13 +1,12 @@
 %% setup
 close all;
 clc;
-global N 
+global N
 N = 70; % # grid points in each direction
 caseNum = 4;
 lower_length = .0762; % in m
 upper_length = .0508; % in m
 test_section_length = .762; % in m
-grade = 50;
 %=============================Setup Complete===============================
 
 % read the Empirical (EMP) FOV data
@@ -59,65 +58,6 @@ EMP = find_splitter_idx(EMP);
 %plot_normalized_vels(x,F_KW,'k-e Profiles', q_KW, thick_KW, middle_KW);
 %plot_normalized_vels(x, F_ED, 'empirical profiles', q_ED, thick_ED, middle_ED);
 %
-% %% get data at outlet
-% % x_outlet = 2.0319* ones(1, 1000);
-% % y_outlet = linspace(-.13335, .10795, 1000);
-% % q_outlet = F_KW(x_outlet, y_outlet);
-%
-% % figure();
-% % plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.007);
-% % title('old');
-% % pause(1);
-% % hold on;
-% % clf;
-% % plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.07);
-% % title('new');
-% % pause(1);
-% % clf;
-% % plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.15);
-% % title('3');
-% % pause(1);
-% % clf;
-% plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.2);
-% title('4');
-% pause(1);
-% clf;
-% plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.3);
-% title('5');
-% pause(1);
-% clf;
-% plot_normalized_vel(x,F_KW, q_KW,thick_KW,middle_KW,0.4);
-% title('6');
-
-
-% figure();
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, 0);
-% title('old');
-% pause(2);
-% hold on;
-% clf;
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .05);
-% title('new');
-% pause(2);
-% clf;
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .1);
-% title('3');
-% pause(2);
-% clf;
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .15);
-% title('4');
-% pause(2);
-% clf;
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .2);
-% title('5');
-% pause(2);
-% clf;
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .25);
-% title('6');
-% pause(2);
-% clf;
-% plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .3);
-% title('7');
 
 %% testing
 caseNum = 1;
@@ -145,5 +85,25 @@ figure();
 KW(1).normed_profiles = profile;
 KW(1).eta = eta;
 
+KW(1).avg_normed_vel_profile = average_normalized_vel_profile(KW,1);
+plot(KW(1).avg_normed_vel_profile,eta,'LineWidth',2);
 
+%%
+close all;
+KW = get_profiles(KW, grade);
+KE = get_profiles(KE, grade);
+SA = get_profiles(SA, grade);
+RS = get_profiles(RS, grade);
+EMP = get_profiles(EMP, grade);
 
+plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,1);
+plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,2);
+plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,3);
+plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,4);
+plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,5);
+
+comparison_view('u', EMP, KW,KE,SA,RS,1);
+comparison_view('u', EMP, KW,KE,SA,RS,2);
+comparison_view('u', EMP, KW,KE,SA,RS,3);
+comparison_view('u', EMP, KW,KE,SA,RS,4);
+comparison_view('u', EMP, KW,KE,SA,RS,5);
