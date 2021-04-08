@@ -1,7 +1,7 @@
 %% setup
 close all;
 clc;
-global N
+global N lower_length upper_length
 N = 70; % # grid points in each direction
 caseNum = 4;
 lower_length = .0762; % in m
@@ -17,7 +17,7 @@ if (exist('EMP')== 0)
 end
 [EMP] = get_FOV_Data(Q, EMP);
 grade = 90;
-plot_colorplot(append('u velocity empirical case ', num2str(caseNum)),EMP, grade, caseNum,'u');
+%plot_colorplot(append('u velocity empirical case ', num2str(caseNum)),EMP, grade, caseNum,'u');
 
 %% Load CFD Data
 if (exist('KW')== 0)
@@ -45,6 +45,13 @@ KW = find_splitter_idx(KW);
 SA = find_splitter_idx(SA);
 EMP = find_splitter_idx(EMP);
 %%
+
+x = 1;
+[KE] = find_avg_vel(KE,x,grade);
+[RS] = find_avg_vel(RS,x,grade);
+[KW] = find_avg_vel(KW,x,grade);
+[SA] = find_avg_vel(SA,x,grade);
+[EMP] = find_avg_vel(EMP,x,grade);
 % figure();
 % subplot(3,2,1)
 %plot_vels(x,F_ED, 'numerical',q_ED, thick_ED, middle_ED, .01);
@@ -62,35 +69,42 @@ EMP = find_splitter_idx(EMP);
 
 %% testing
 caseNum = 1;
-figure();
-plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum, 'u');
-figure();
+%figure();
+%plot_colorplot(append('k-e case ', num2str(caseNum)),KE, grade, caseNum, 'u');
 comparison_view("u", EMP, KW,KE,SA,RS,'KW');
-figure();
 comparison_view("u", EMP, KW,KE,SA,RS,'KE');
-figure();
 comparison_view("u", EMP, KW,KE,SA,RS,'SA');
-figure();
 comparison_view("u", EMP, KW,KE,SA,RS,'RS');
-figure();
 comparison_view("u", EMP, KW,KE,SA,RS,'EMP');
 %comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
+
+
+%% find average velocities
+x = 1;
+[KE] = find_avg_vel(KE,x,grade);
+[RS] = find_avg_vel(RS,x,grade);
+[KW] = find_avg_vel(KW,x,grade);
+[SA] = find_avg_vel(SA,x,grade);
+[EMP] = find_avg_vel(EMP,x,grade);
+
 %% thickness
 figure();
 grade = 90;
 plot_colorplot("e",KW(1),grade, 1, 'u')
 hold on;
 KW = plotThicknesses(KW,1,grade);
+KE = shearLayerThickness(KE,grade);
+SA = shearLayerThickness(SA, grade);
+RS = shearLayerThickness(RS,grade);
 figure();
 [profile, eta] = plot_normalized_vels("normalized vels", KW, 1,grade);
 KW(1).normed_profiles = profile;
 KW(1).eta = eta;
 
 KW(1).avg_normed_vel_profile = average_normalized_vel_profile(KW,1);
-plot(KW(1).avg_normed_vel_profile,eta,'LineWidth',2);
+%plot(KW(1).avg_normed_vel_profile,eta,'LineWidth',2);
 
 %%
-close all;
 KW = get_profiles(KW, grade);
 KE = get_profiles(KE, grade);
 SA = get_profiles(SA, grade);
@@ -99,6 +113,10 @@ EMP = get_profiles(EMP, grade);
 
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,1);
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,2);
+hold on;
+T = readtable('Default Dataset.csv');
+T = table2array(T);
+plot(T(:,1),T(:,2),'k--', 'LineWidth', 4);
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,3);
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,4);
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,5);
@@ -114,8 +132,48 @@ clc;
 if (exist('KW_XL')== 0)
     KW_XL = struct;
 end
+if (exist('KE_XL')== 0)
+    KE_XL = struct;
+end
+if (exist('SA_XL')== 0)
+    SA_XL = struct;
+end
+if (exist('RS_XL')== 0)
+    RS_XL = struct;
+end
 
-KW_XL = get_expanded_CFD_data('k-w',KW_XL,EMP,[], .33);
-KW_XL = find_splitter_idx(KW_XL);
-KW_XL = shearLayerThickness(KW_XL,90);
-frog = calculate_growth_rate(KW_XL);
+[normed_KW_grs, KW_XL,Mc] = plot_13(KW_XL,EMP, 'k-w');
+[normed_KE_grs, KE_XL,Mc] = plot_13(KE_XL,EMP,'k-e');
+[normed_SA_grs,SA_XL,Mc] = plot_13(SA_XL,EMP,'SA');
+[normed_RS_grs,RS_XL,Mc] = plot_13(RS_XL,EMP,'RS');
+for i = 1:5
+    if (normed_KW_grs(i) == 0)
+        normed_KW_grs(i) = NaN;
+    end
+    if (normed_KE_grs(i) == 0)
+        normed_KE_grs(i) = NaN;
+    end
+    if (normed_SA_grs(i) == 0)
+        normed_SA_grs(i) = NaN;
+    end
+    if (normed_RS_grs(i) == 0)
+        normed_RS_grs(i) = NaN;
+    end
+end
+
+EMP_growth = [1.07,.9,.71,.61,.58];
+figure();
+size = 5;
+plot(Mc,normed_KW_grs,'o','MarkerSize',size);
+hold on;
+plot(Mc,normed_KE_grs,'^','MarkerSize',size);
+plot(Mc,normed_SA_grs,'+','MarkerSize',size);
+plot(Mc,normed_RS_grs,'s','MarkerSize',size);
+plot(Mc,EMP_growth,'d','MarkerSize',size);
+legend('K - omega','K cc- epsilon','Spalart Allmaras','Reynolds Stress','Empirical Data');
+
+title('growth rate comparison');
+xlabel('Mc, convective mach number');
+ylabel('db/dx, shear layer growth rate');
+ylim([0,1.2]);
+xlim([0,2.5]);

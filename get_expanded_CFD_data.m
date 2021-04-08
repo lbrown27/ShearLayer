@@ -13,7 +13,7 @@ for j = 1:5
     filename = append('Data/',turb_method, ' Case ', num2str(j));
     fprintf(filename);
     if isfile(filename)
-        fprintf(' file found\n');
+        fprintf(' file found for xl\n');
         StructName(j).exists = 1; % make sure that the struct exists before doing stuff
         if (isfield(StructName(j),(names{1})) == 0) % x
             fprintf('not a field.\n');

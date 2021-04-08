@@ -1,22 +1,38 @@
-function [top_vel, bottom_vel] = find_avg_vel(q,y)
-global top_wall_BL splitter_plate_top_BL splitter_plate_bottom_BL ...
-    bottom_wall_BL splitter_idx N delta_U
-find_splitter_idx(y);
-% top velocity
-for i = splitter_idx:N
-    if y(i) > splitter_plate_top_BL
-        upper_idx = i;
-        break;
+function [STRUCT] = find_avg_vel(STRUCT,x,grade)
+global N lower_length upper_length
+STRUCT = shearLayerThickness(STRUCT,grade);
+for x_idx = 1:N
+    for i = 1:length(STRUCT(5).case_vec)
+        caseNum = STRUCT(5).case_vec(i);
+        [~, ~, top_wall_BL, splitter_plate_top_BL, splitter_plate_bottom_BL,...
+            bottom_wall_BL,~,~] = getInfo(caseNum);
+        [STRUCT] = find_splitter_idx(STRUCT);
+        % top velocity
+        for i = STRUCT(caseNum).splitter_idx:N
+            if STRUCT(caseNum).y(i) > STRUCT(caseNum).y(STRUCT(caseNum).thickness_upper(x_idx))
+                upper_idx = i;
+                break;
+            end
+        end
+        for i = STRUCT(caseNum).splitter_idx:N
+            if STRUCT(caseNum).y(i) < upper_length - top_wall_BL
+                upper_stop_idx = i;
+            end
+        end
+        STRUCT(caseNum).top_vel(x_idx) = mean(STRUCT(caseNum).u(upper_idx:upper_stop_idx,x_idx));
+        % bottom velocity
+        for i = STRUCT(caseNum).splitter_idx:-1:1
+            disp(STRUCT(caseNum).y(i))
+            if STRUCT(caseNum).y(i) < (STRUCT(caseNum).y(STRUCT(caseNum).thickness_lower(x_idx)))
+                lower_idx = i;
+                break;
+            end
+        end
+         for i = STRUCT(caseNum).splitter_idx:-1:1
+            if STRUCT(caseNum).y(i) > -1 * lower_length + bottom_wall_BL
+                lower_stop_idx = i;
+            end
+        end
+        STRUCT(caseNum).bottom_vel(x_idx) = mean(STRUCT(caseNum).u(lower_stop_idx:lower_idx,x_idx));
     end
-end
-top_vel = mean(q(upper_idx:N,1));
-% bottom velocity
-for i = splitter_idx:-1:1
-    if y(i) < splitter_plate_bottom_BL
-        lower_idx = i;
-        break;
-    end
-end
-bottom_vel = mean(q(1:lower_idx,1));
-delta_U = top_vel - bottom_vel;
 end

@@ -60,21 +60,21 @@ else
         plotvector(2).(char(parameter)) = KE(caseNum).(char(parameter));
         plotvector(3).(char(parameter)) = RS(caseNum).(char(parameter));
         plotvector(4).(char(parameter)) = SA(caseNum).(char(parameter));
-        plotvector(5).(char(parameter)) = EMP(caseNum).(char(parameter));
+        %plotvector(5).(char(parameter)) = EMP(caseNum).(char(parameter));
         
         plotvector(1).X = KW(caseNum).X;
         plotvector(2).X = KE(caseNum).X;
         plotvector(3).X = RS(caseNum).X;
         plotvector(4).X = SA(caseNum).X;
-        plotvector(5).X = EMP(caseNum).X;
+        %plotvector(5).X = EMP(caseNum).X;
         
         plotvector(1).Y = KW(caseNum).Y;
         plotvector(2).Y = KE(caseNum).Y;
         plotvector(3).Y = RS(caseNum).Y;
         plotvector(4).Y = SA(caseNum).Y;
-        plotvector(5).Y = EMP(caseNum).Y;
+        %plotvector(5).Y = EMP(caseNum).Y;
         legendvec = ["KW","KE", "RS", "SA", "EMP"];
-        for i = 1:5
+        for i = 1:4
             subplot(3,2,i);
             if (~(length(plotvector(i).(char(parameter))) == 0))
                 plot_colorplot(append(legendvec(i), ' case ', num2str(caseNum)),plotvector, 90,i,parameter);

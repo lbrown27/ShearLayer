@@ -7,9 +7,6 @@ for i = 1:5
     if (isfield(STRUCT(i),'thickness') && ~isempty(STRUCT(i).thickness))
     db_dx(i) = (STRUCT(i).thickness(x_idx_stop) - STRUCT(i).thickness(x_idx_start))...
         /(STRUCT(i).x(x_idx_stop) - STRUCT(i).x(x_idx_start));
-    else 
-        fprintf('\ntoad\n');
     end
-   
 end
 end

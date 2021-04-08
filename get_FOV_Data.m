@@ -32,5 +32,7 @@ for j = 1:5
             end
         end
     end
+    STRUCT(j).case_vec = [1;2;3;4;5];
 end
+
 end

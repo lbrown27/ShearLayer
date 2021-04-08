@@ -9,12 +9,13 @@ x_idx = 2;
 y_idx = 3;
 addpath('Data');
 STRUCT = repmat(struct,5,1);
-
+case_vec = [];
 for j = 1:5
     filename = append('Data/',turb_method, ' Case ', num2str(j));
     fprintf(filename);
     if isfile(filename)
         fprintf(' file found\n');
+        case_vec = [case_vec; j];
         StructName(j).exists = 1; % make sure that the struct exists before doing stuff
         if (isfield(StructName(j),(names{1})) == 0) % x
             fprintf('not a field.\n');
@@ -54,5 +55,7 @@ for j = 1:5
     else
         fprintf(' not a file\n');
     end
+    STRUCT(j).case_vec = case_vec;
 end
+
 end
