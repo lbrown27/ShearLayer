@@ -1,7 +1,5 @@
-function [frog,STRUCT,Mc] = plot_13(STRUCT,EMP, name)
+function [STRUCT] = plot_13(STRUCT,EMP, name)
 
-STRUCT = find_splitter_idx(STRUCT);
-STRUCT = shearLayerThickness(STRUCT,90);
 frog = calculate_growth_rate(STRUCT);
 Mc = [.185,.381,.546,.69,.883];
 rho_1 = [1.1527,1.1418,1.1344,1.188,1.3555];
@@ -11,7 +9,8 @@ for i = 1:5
 r = lower_speed/upper_speed;
 s = rho_2(i)/rho_1(i);
 db_dx_0 = .165*(1-r)*(1+s^.5)/(2*(1+r*s^.5));
-frog(i) = frog(i)/db_dx_0;
+STRUCT(i).normed_gr = frog(i)/db_dx_0;
+STRUCT(i).Mc = Mc(i);
 end
 %figure();
 %plot(Mc,frog,'.','MarkerSize',20);
