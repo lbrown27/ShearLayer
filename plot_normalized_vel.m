@@ -4,9 +4,10 @@ global N
 [~, x_idx] = min(abs(STRUCT(caseNum).x-x0)); % find x val closest to each x point needed
 upper_speed = STRUCT(caseNum).top_vel(1);
 lower_speed = STRUCT(caseNum).bottom_vel(1);
-delta_U = upper_speed - lower_speed;
+%delta_U = upper_speed - lower_speed;
+delta_U = STRUCT(caseNum).top_vel(x_idx) - STRUCT(caseNum).bottom_vel(x_idx);
 fprintf("doing new thing");
-eta = linspace(-1.05,1.05, N);
+eta = linspace(-1.2,1.2, N);
 STRUCT = shearLayerThickness(STRUCT,grade);
 b0 = STRUCT(caseNum).thickness(x_idx);
 y0 = STRUCT(caseNum).middle(x_idx);

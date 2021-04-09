@@ -8,7 +8,7 @@ if (strcmp('KW',comp_type))
     for i = 1:5
         subplot(3,2,i);
         if (~(length(plotvector(i).(char(parameter))) == 0))
-            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter);
+            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter,EMP);
         end
     end
 elseif (strcmp('KE',comp_type))
@@ -17,7 +17,7 @@ elseif (strcmp('KE',comp_type))
     for i = 1:5
         subplot(3,2,i);
         if (~(length(plotvector(i).(char(parameter))) == 0))
-            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter);
+            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter,EMP);
         end
     end
 elseif (strcmp('SA',comp_type))
@@ -26,7 +26,7 @@ elseif (strcmp('SA',comp_type))
     for i = 1:5
         subplot(3,2,i);
         if (~(length(plotvector(i).(char(parameter))) == 0))
-            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter);
+            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter,EMP);
         end
     end
 elseif (strcmp('RS',comp_type))
@@ -35,7 +35,7 @@ elseif (strcmp('RS',comp_type))
     for i = 1:5
         subplot(3,2,i);
         if (~(length(plotvector(i).(char(parameter))) == 0))
-            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter);
+            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter,EMP);
         end
     end
 elseif (strcmp('EMP',comp_type))
@@ -44,7 +44,7 @@ elseif (strcmp('EMP',comp_type))
     for i = 1:5
         subplot(3,2,i);
         if (~(length(plotvector(i).(char(parameter))) == 0))
-            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter);
+            plot_colorplot(append(comp_type, ' case',num2str(i)),plotvector, 90,i,parameter,EMP);
         end
     end
 else
@@ -77,7 +77,7 @@ else
         for i = 1:4
             subplot(3,2,i);
             if (~(length(plotvector(i).(char(parameter))) == 0))
-                plot_colorplot(append(legendvec(i), ' case ', num2str(caseNum)),plotvector, 90,i,parameter);
+                plot_colorplot(append(legendvec(i), ' case ', num2str(caseNum)),plotvector, 90,i,parameter,EMP);
             end
         end
     end

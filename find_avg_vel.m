@@ -22,7 +22,6 @@ for x_idx = 1:N
         STRUCT(caseNum).top_vel(x_idx) = mean(STRUCT(caseNum).u(upper_idx:upper_stop_idx,x_idx));
         % bottom velocity
         for i = STRUCT(caseNum).splitter_idx:-1:1
-            disp(STRUCT(caseNum).y(i))
             if STRUCT(caseNum).y(i) < (STRUCT(caseNum).y(STRUCT(caseNum).thickness_lower(x_idx)))
                 lower_idx = i;
                 break;

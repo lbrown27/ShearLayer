@@ -1,6 +1,5 @@
 function [frog,STRUCT,Mc] = plot_13(STRUCT,EMP, name)
 
-STRUCT = get_expanded_CFD_data(name,STRUCT,EMP,[], .33);
 STRUCT = find_splitter_idx(STRUCT);
 STRUCT = shearLayerThickness(STRUCT,90);
 frog = calculate_growth_rate(STRUCT);

@@ -2,7 +2,7 @@
 close all;
 clc;
 global N lower_length upper_length
-N = 70; % # grid points in each direction
+N = 60; % # grid points in each direction
 caseNum = 4;
 lower_length = .0762; % in m
 upper_length = .0508; % in m
@@ -16,28 +16,30 @@ if (exist('EMP')== 0)
     fprintf('Emp doesnt exist!');
 end
 [EMP] = get_FOV_Data(Q, EMP);
-grade = 90;
+grade = 99;
+max_XL = .33;
 %plot_colorplot(append('u velocity empirical case ', num2str(caseNum)),EMP, grade, caseNum,'u');
 
 %% Load CFD Data
 if (exist('KW')== 0)
     KW = struct;
 end
-KW = get_CFD_Data('k-w', KW,EMP,[],max(EMP(1).x));
+%KW = get_CFD_Data('k-w', KW,EMP,[],max(EMP(1).x));
+KW = get_CFD_Data('k-w', KW,EMP,[],max_XL);
 if (exist('KE')== 0)
     KE = struct;
     fprintf('KE doesnt exist!');
 end
-KE = get_CFD_Data('k-e', KE,EMP,[],max(EMP(1).x));
+KE = get_CFD_Data('k-e', KE,EMP,[],max_XL);
 
 if (exist('SA')== 0)
     SA = struct;
 end
-SA = get_CFD_Data('SA', SA,EMP,[], max(EMP(1).x));
+SA = get_CFD_Data('SA', SA,EMP,[],max_XL);
 if (exist('RS')== 0)
     RS = struct;
 end
-RS = get_CFD_Data('RS', RS,EMP,[], max(EMP(1).x));
+RS = get_CFD_Data('RS', RS,EMP,[],max_XL);
 
 RS = find_splitter_idx(RS);
 KE = find_splitter_idx(KE);
@@ -79,23 +81,28 @@ comparison_view("u", EMP, KW,KE,SA,RS,'EMP');
 %comparison_view(cellstr("u"), EMP, KW,KE,SA,RS, 'KW');
 
 
-%% find average velocities
-x = 1;
-[KE] = find_avg_vel(KE,x,grade);
-[RS] = find_avg_vel(RS,x,grade);
-[KW] = find_avg_vel(KW,x,grade);
-[SA] = find_avg_vel(SA,x,grade);
-[EMP] = find_avg_vel(EMP,x,grade);
+%% find average velocities (put this back in if thing breaks)
+% x = 1;
+% [KE] = find_avg_vel(KE,x,grade);
+% [RS] = find_avg_vel(RS,x,grade);
+% [KW] = find_avg_vel(KW,x,grade);
+% [SA] = find_avg_vel(SA,x,grade);
+% [EMP] = find_avg_vel(EMP,x,grade);
 
 %% thickness
 figure();
-grade = 90;
-plot_colorplot("e",KW(1),grade, 1, 'u')
+plot_colorplot("e",KW(1),grade, 1, 'u',EMP)
 hold on;
 KW = plotThicknesses(KW,1,grade);
 KE = shearLayerThickness(KE,grade);
 SA = shearLayerThickness(SA, grade);
 RS = shearLayerThickness(RS,grade);
+EMP = shearLayerThickness(EMP,grade);
+KW = getMiddleBetter(KW);
+KE = getMiddleBetter(KE);
+SA = getMiddleBetter(SA);
+RS = getMiddleBetter(RS);
+EMP = getMiddle(EMP);
 figure();
 [profile, eta] = plot_normalized_vels("normalized vels", KW, 1,grade);
 KW(1).normed_profiles = profile;
@@ -128,24 +135,11 @@ comparison_view('u', EMP, KW,KE,SA,RS,4);
 comparison_view('u', EMP, KW,KE,SA,RS,5);
 
 %% growth rate calculations
-clc;
-if (exist('KW_XL')== 0)
-    KW_XL = struct;
-end
-if (exist('KE_XL')== 0)
-    KE_XL = struct;
-end
-if (exist('SA_XL')== 0)
-    SA_XL = struct;
-end
-if (exist('RS_XL')== 0)
-    RS_XL = struct;
-end
 
-[normed_KW_grs, KW_XL,Mc] = plot_13(KW_XL,EMP, 'k-w');
-[normed_KE_grs, KE_XL,Mc] = plot_13(KE_XL,EMP,'k-e');
-[normed_SA_grs,SA_XL,Mc] = plot_13(SA_XL,EMP,'SA');
-[normed_RS_grs,RS_XL,Mc] = plot_13(RS_XL,EMP,'RS');
+[normed_KW_grs, KW,Mc] = plot_13(KW,EMP, 'k-w');
+[normed_KE_grs, KE,Mc] = plot_13(KE,EMP,'k-e');
+[normed_SA_grs,SA,Mc] = plot_13(SA,EMP,'SA');
+[normed_RS_grs,RS,Mc] = plot_13(RS,EMP,'RS');
 for i = 1:5
     if (normed_KW_grs(i) == 0)
         normed_KW_grs(i) = NaN;

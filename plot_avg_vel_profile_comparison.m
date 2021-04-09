@@ -39,5 +39,5 @@ legend(legendvec);
 title(append(' case ',num2str(caseNum), ' average normalized velocity profile'),'FontSize' , 20);
 xlabel('(U-U2) / delta U','FontSize' , 20);
 ylabel('eta, or (y - y0) / b','FontSize' , 20)
-
+ylim([-3 3]);
 end

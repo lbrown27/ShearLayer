@@ -1,7 +1,7 @@
 function STRUCT = get_CFD_Data(turb_method,StructName,EMP,params, max_x)
 global N
-names = ["x","y","pressure","density","u","v"];
-u_name_idx = 5;
+names = ["x","y","pressure","u","v"];
+u_name_idx = 4;
 names = [names,params];
 indices = data_key(names);
 names = cellstr(names);
@@ -18,7 +18,7 @@ for j = 1:5
         case_vec = [case_vec; j];
         StructName(j).exists = 1; % make sure that the struct exists before doing stuff
         if (isfield(StructName(j),(names{1})) == 0) % x
-            fprintf('not a field.\n');
+            fprintf('%s is not a stored field. Getting %s data...\n', names{1},names{1});
             F = unstructured_reader(filename,x_idx, y_idx,indices(1));
             T = readtable(filename);
             A = table2array(T);
@@ -39,19 +39,20 @@ for j = 1:5
         end
         for i = 3:length(indices)
             if (isfield(StructName(j),(names{i})) == 0)
-                fprintf('not a field.\n');
+                fprintf('%s is not a stored field. Getting %s data...\n', names{i},names{i});
                 F = unstructured_reader(filename,x_idx, y_idx,indices(i));
                 STRUCT(j).(names{i}) = F(STRUCT(j).X,STRUCT(j).Y);
                 if (i == u_name_idx)
-                    STRUCT(j).F_u = F;
+                    fprintf("\nassigning F_u!\n");
+                    StructName(j).F_u = F;
                 end
             else
                 STRUCT(j).(names{i}) = StructName(j).(names{i});
-                STRUCT(j).F_u = StructName(j).F_u;
             end
             %[STRUCT.thick, STRUCT.middle] = plot_colorplot(2,filename,q, 50);%last
             %num is the grade
         end
+        STRUCT(j).F_u = StructName(j).F_u;
     else
         fprintf(' not a file\n');
     end
