@@ -1,5 +1,4 @@
 function [avg_normed_vel_profiles, standard_dev] = average_normalized_vel_profile(STRUCT, caseNum)
-disp(caseNum);
 [x_size, y_size] = size(STRUCT(caseNum).normed_profiles);
 if (~(length(STRUCT(caseNum).X) == 0))
     for i = 1: y_size

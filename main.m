@@ -1,8 +1,8 @@
 %% setup
 close all;
-global N lower_length upper_length
+global N lower_length upper_length grade
 N = 500; % # grid points in each direction
-
+grade = 85;
 
 %% Grab Data
 data_on = input('\ncollect or refresh data? 1 = yes, other = no. \n','s');
@@ -62,16 +62,26 @@ comparison_view('u', EMP, KW,KE,SA,RS,5,'thicknesslines_on');
 EMP_growth = [1.07,.9,.71,.61,.58];
 figure();
 size = 5;
-plot(Mc,normed_KW_grs,'o','MarkerSize',size);
-hold on;
-plot(Mc,normed_KE_grs,'^','MarkerSize',size);
-plot(Mc,normed_SA_grs,'+','MarkerSize',size);
-plot(Mc,normed_RS_grs,'s','MarkerSize',size);
-plot(Mc,EMP_growth,'d','MarkerSize',size);
+Mc = [.185,.381,.546,.690,.883];
+
+for i = 1:5
+    KW_normed_grs(i) = KW(i).normed_gr;
+    KE_normed_grs(i) = KE(i).normed_gr;
+    SA_normed_grs(i) = SA(i).normed_gr;
+    RS_normed_grs(i) = RS(i).normed_gr;
+end
+for i = 1:5
+    plot(Mc,KW_normed_grs,'o','MarkerSize',size);
+    hold on;
+    plot(Mc,KE_normed_grs,'^','MarkerSize',size);
+    plot(Mc,SA_normed_grs,'+','MarkerSize',size);
+    plot(Mc,RS_normed_grs,'s','MarkerSize',size);
+end
+plot(Mc,EMP_growth);
 legend('K - omega','K cc- epsilon','Spalart Allmaras','Reynolds Stress','Empirical Data');
 
 title('growth rate comparison');
 xlabel('Mc, convective mach number');
 ylabel('db/dx, shear layer growth rate');
-ylim([0,1.2]);
-xlim([0,2.5]);
+% ylim([0,1.2]);
+% xlim([0,2.5]);

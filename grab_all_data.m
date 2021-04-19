@@ -2,7 +2,7 @@ function [KW,KE,SA,RS,EMP] = grab_all_data(KW,KE,SA,RS,EMP)
 %% setup
 close all;
 clc;
-global N lower_length upper_length 
+global N lower_length upper_length grade
 N = 500; % # grid points in each direction
 caseNum = 4;
 lower_length = .0762; % in m
@@ -13,7 +13,6 @@ test_section_length = .762; % in m
 % read the Empirical (EMP) FOV data
 Q = read_raw_EMP_data(caseNum);
 [EMP] = get_FOV_Data(Q, EMP);
-grade = 99;
 max_XL = .33;
 %plot_colorplot(append('u velocity empirical case ', num2str(caseNum)),EMP, grade, caseNum,'u');
 
@@ -29,25 +28,36 @@ KE = find_splitter_idx(KE);
 KW = find_splitter_idx(KW);
 SA = find_splitter_idx(SA);
 EMP = find_splitter_idx(EMP);
+ 
 
+
+for caseNum = 1:5
+        KW(caseNum).thickness_upper = 1;
+        KW(caseNum).thickness_lower = 1;
+        KE(caseNum).thickness_upper = 1;
+        KE(caseNum).thickness_lower = 1;
+        SA(caseNum).thickness_upper = 1;
+        SA(caseNum).thickness_lower = 1;
+        RS(caseNum).thickness_upper = 1;
+        RS(caseNum).thickness_lower = 1;
+        EMP(caseNum).thickness_upper = 1;
+        EMP(caseNum).thickness_lower = 1;
+end
+
+for i = 1:5
+    
+    fprintf('calculation number %d',i );
 KW = shearLayerThickness(KW, grade);
 KE = shearLayerThickness(KE, grade);
 SA = shearLayerThickness(SA, grade);
 RS = shearLayerThickness(RS, grade);
 EMP = shearLayerThickness(EMP, grade);
 
-x = 1;
 [KE] = find_avg_vel(KE);
 [RS] = find_avg_vel(RS);
 [KW] = find_avg_vel(KW);
 [SA] = find_avg_vel(SA);
 [EMP] = find_avg_vel(EMP);
-
-KE = shearLayerThickness(KE,grade);
-KE = shearLayerThickness(KE,grade);
-SA = shearLayerThickness(SA, grade);
-RS = shearLayerThickness(RS,grade);
-EMP = shearLayerThickness(EMP,grade);
 
 KW = getMiddleBetter(KW);
 KE = getMiddleBetter(KE);
@@ -55,16 +65,18 @@ SA = getMiddleBetter(SA);
 RS = getMiddleBetter(RS);
 EMP = getMiddleBetter(EMP);
 
+end
+
 KW = get_profiles(KW, grade);
 KE = get_profiles(KE, grade);
 SA = get_profiles(SA, grade);
 RS = get_profiles(RS, grade);
 EMP = get_profiles(EMP, grade);
 
-[KW] = plot_13(KW,EMP,'k-w');
-[KE] = plot_13(KE,EMP,'k-e');
-[SA] = plot_13(SA,EMP,'SA');
-[RS] = plot_13(RS,EMP,'RS');
+[KW] = find_normed_gr(KW,EMP,'k-w');
+[KE] = find_normed_gr(KE,EMP,'k-e');
+[SA] = find_normed_gr(SA,EMP,'SA');
+[RS] = find_normed_gr(RS,EMP,'RS');
 
 
 for i = 1:5
