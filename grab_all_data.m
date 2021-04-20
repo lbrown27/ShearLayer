@@ -28,12 +28,14 @@ KE = find_splitter_idx(KE);
 KW = find_splitter_idx(KW);
 SA = find_splitter_idx(SA);
 EMP = find_splitter_idx(EMP);
- 
 
 
-for caseNum = 1:5
-        KW(caseNum).thickness_upper = 1;
-        KW(caseNum).thickness_lower = 1;
+
+get_thicknesses = input('\ncollect or refresh thickness data? 1 = yes, other = no. \n','s');
+if (strcmp(get_thicknesses, '1'))
+    for caseNum = 1:5
+        KW(caseNum).thickness_upper = 5*ones(1,N);
+        KW(caseNum).thickness_lower = 5*ones(1,N);
         KE(caseNum).thickness_upper = 1;
         KE(caseNum).thickness_lower = 1;
         SA(caseNum).thickness_upper = 1;
@@ -42,30 +44,40 @@ for caseNum = 1:5
         RS(caseNum).thickness_lower = 1;
         EMP(caseNum).thickness_upper = 1;
         EMP(caseNum).thickness_lower = 1;
+    end
+    for i = 1:8
+        KW = shearLayerThickness(KW, grade);
+        KE = shearLayerThickness(KE, grade);
+        SA = shearLayerThickness(SA, grade);
+        RS = shearLayerThickness(RS, grade);
+        EMP = shearLayerThickness(EMP, grade);
+        
+        [KE] = find_avg_vel(KE);
+        [RS] = find_avg_vel(RS);
+        [KW] = find_avg_vel(KW);
+        [SA] = find_avg_vel(SA);
+        [EMP] = find_avg_vel(EMP);
+        
+        KW = getMiddleBetter(KW);
+        KE = getMiddleBetter(KE);
+        SA = getMiddleBetter(SA);
+        RS = getMiddleBetter(RS);
+        EMP = getMiddleBetter(EMP);
+    end
 end
+% count = 0;
+% sum(abs(KW(1).y(KW(1).thickness_upper_previous) - KW(1).y(KW(1).thickness_upper)))
+% for i = 1:5
+% while (sum(abs(KW(i).y(KW(i).thickness_upper_previous) - KW(i).y(KW(i).thickness_upper))) > 1e-3)
+%     KW = shearLayerThickness(KW, grade);
+%     KW = find_avg_vel(KW);
+%     KW = getMiddleBetter(KW);
+%     count = count + 1;
+% end
+% end
+% fprintf('\ndone after %f iterations\n',count);
 
-for i = 1:5
-    
-    fprintf('calculation number %d',i );
-KW = shearLayerThickness(KW, grade);
-KE = shearLayerThickness(KE, grade);
-SA = shearLayerThickness(SA, grade);
-RS = shearLayerThickness(RS, grade);
-EMP = shearLayerThickness(EMP, grade);
 
-[KE] = find_avg_vel(KE);
-[RS] = find_avg_vel(RS);
-[KW] = find_avg_vel(KW);
-[SA] = find_avg_vel(SA);
-[EMP] = find_avg_vel(EMP);
-
-KW = getMiddleBetter(KW);
-KE = getMiddleBetter(KE);
-SA = getMiddleBetter(SA);
-RS = getMiddleBetter(RS);
-EMP = getMiddleBetter(EMP);
-
-end
 
 KW = get_profiles(KW, grade);
 KE = get_profiles(KE, grade);

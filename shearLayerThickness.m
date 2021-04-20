@@ -37,10 +37,10 @@ for q = 1:length(STRUCT(5).case_vec)
     for i = 1:N
         
         STRUCT(caseNum).thickness(i) = STRUCT(caseNum).y(yup(i)) - STRUCT(caseNum).y(ydown(i));
+    end
         STRUCT(caseNum).thickness_upper_previous = STRUCT(caseNum).thickness_upper;
         STRUCT(caseNum).thickness_lower_previous = STRUCT(caseNum).thickness_lower;
         STRUCT(caseNum).thickness_upper = yup;
         STRUCT(caseNum).thickness_lower = ydown;
-    end
 end
 end

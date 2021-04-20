@@ -28,17 +28,18 @@ if (strcmp('1',data_on) == 1)
     [KW,KE,SA,RS,EMP] = grab_all_data(KW,KE,SA,RS,EMP);
 end
 %% compare by case
-comparison_view("u", EMP, KW,KE,SA,RS,'KW','thicknesslines_on');
-comparison_view("u", EMP, KW,KE,SA,RS,'KE','thicknesslines_on');
-comparison_view("u", EMP, KW,KE,SA,RS,'SA','thicknesslines_on');
-comparison_view("u", EMP, KW,KE,SA,RS,'RS','thicknesslines_on');
-comparison_view("u", EMP, KW,KE,SA,RS,'EMP','thicknesslines_on');
+% comparison_view("u", EMP, KW,KE,SA,RS,'KW','thicknesslines_on');
+% comparison_view("u", EMP, KW,KE,SA,RS,'KE','thicknesslines_on');
+% comparison_view("u", EMP, KW,KE,SA,RS,'SA','thicknesslines_on');
+% comparison_view("u", EMP, KW,KE,SA,RS,'RS','thicknesslines_on');
+% comparison_view("u", EMP, KW,KE,SA,RS,'EMP','thicknesslines_on');
 
 %% thickness
+close all;
 figure();
+
 plot_colorplot("e",KW(1),grade, 1, 'u',EMP,'thicknesslines_on');
 
-%%
 
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,1);
 plot_avg_vel_profile_comparison(KW,KE,SA,RS,EMP,2);
@@ -78,7 +79,7 @@ for i = 1:5
     plot(Mc,RS_normed_grs,'s','MarkerSize',size);
 end
 plot(Mc,EMP_growth);
-legend('K - omega','K cc- epsilon','Spalart Allmaras','Reynolds Stress','Empirical Data');
+legend('K - omega','K - epsilon','Spalart Allmaras','Reynolds Stress','Empirical Data');
 
 title('growth rate comparison');
 xlabel('Mc, convective mach number');
