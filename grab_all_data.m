@@ -45,18 +45,18 @@ if (strcmp(get_thicknesses, '1'))
         EMP(caseNum).thickness_upper = 1;
         EMP(caseNum).thickness_lower = 1;
     end
-    for i = 1:5
+    for i = 1:3
         KW = thickness(KW, grade);
         KE = thickness(KE, grade);
         SA = thickness(SA, grade);
         RS = thickness(RS, grade);
         EMP = thickness(EMP, grade);
         
-        [KE] = find_avg_vel(KE);
-        [RS] = find_avg_vel(RS);
-        [KW] = find_avg_vel(KW);
-        [SA] = find_avg_vel(SA);
-        [EMP] = find_avg_vel(EMP);
+        KE = find_avg_vel(KE);
+        RS = find_avg_vel(RS);
+        KW = find_avg_vel(KW);
+        SA = find_avg_vel(SA);
+        EMP = find_avg_vel(EMP);
         
         KW = getMiddleBetter(KW);
         KE = getMiddleBetter(KE);

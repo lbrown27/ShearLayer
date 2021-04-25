@@ -91,6 +91,12 @@ else
         plotvector(4).thickness_lower = SA(caseNum).thickness_lower;
         plotvector(5).thickness_lower = EMP(caseNum).thickness_lower;
         
+          
+        plotvector(1).middle = KW(caseNum).middle;
+        plotvector(2).middle = KE(caseNum).middle;
+        plotvector(3).middle = RS(caseNum).middle;
+        plotvector(4).middle = SA(caseNum).middle;
+        plotvector(5).middle = EMP(caseNum).middle;
         legendvec = ["KW","KE", "RS", "SA", "EMP"];
         for i = 1:5
             subplot(3,2,i);

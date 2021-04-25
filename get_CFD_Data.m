@@ -7,11 +7,11 @@ indices = data_key(names);
 names = cellstr(names);
 x_idx = 2;
 y_idx = 3;
-addpath('Data');
+addpath('New Data');
 STRUCT = repmat(struct,5,1);
 case_vec = [];
 for j = 1:5
-    filename = append('Data/',turb_method, ' Case ', num2str(j));
+    filename = append('New Data/',turb_method, ' Case ', num2str(j));
     fprintf(filename);
     if isfile(filename)
         fprintf(' file found\n');
