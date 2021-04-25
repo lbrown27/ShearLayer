@@ -45,12 +45,12 @@ if (strcmp(get_thicknesses, '1'))
         EMP(caseNum).thickness_upper = 1;
         EMP(caseNum).thickness_lower = 1;
     end
-    for i = 1:8
-        KW = shearLayerThickness(KW, grade);
-        KE = shearLayerThickness(KE, grade);
-        SA = shearLayerThickness(SA, grade);
-        RS = shearLayerThickness(RS, grade);
-        EMP = shearLayerThickness(EMP, grade);
+    for i = 1:5
+        KW = thickness(KW, grade);
+        KE = thickness(KE, grade);
+        SA = thickness(SA, grade);
+        RS = thickness(RS, grade);
+        EMP = thickness(EMP, grade);
         
         [KE] = find_avg_vel(KE);
         [RS] = find_avg_vel(RS);
@@ -84,6 +84,7 @@ KE = get_profiles(KE, grade);
 SA = get_profiles(SA, grade);
 RS = get_profiles(RS, grade);
 EMP = get_profiles(EMP, grade);
+
 
 [KW] = find_normed_gr(KW,EMP,'k-w');
 [KE] = find_normed_gr(KE,EMP,'k-e');

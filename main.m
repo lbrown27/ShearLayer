@@ -1,7 +1,7 @@
 %% setup
 close all;
 global N lower_length upper_length grade
-N = 500; % # grid points in each direction
+N = 1000; % # grid points in each direction
 grade = 85;
 
 %% Grab Data
@@ -86,3 +86,8 @@ xlabel('Mc, convective mach number');
 ylabel('db/dx, shear layer growth rate');
 % ylim([0,1.2]);
 % xlim([0,2.5]);
+
+%% 
+plot_all_profiles(KW,1);
+yvec = linspace(-2,2,N);
+plot(zeros(1,N),yvec);

@@ -1,7 +1,5 @@
-function [STRUCT] = shearLayerThickness(STRUCT, grade)
+function [STRUCT] = thickness(STRUCT, grade)
 global N
-%if (~isfield(STRUCT, 'thickness'))
-%calculate upper shear layer thickness
 ydown = ones(1, N)*5;
 for q = 1:length(STRUCT(5).case_vec)
     caseNum = STRUCT(5).case_vec(q);
@@ -15,10 +13,14 @@ for q = 1:length(STRUCT(5).case_vec)
         lower_speed = lower_speed * ones(1,N);
         fprintf('\nyou should call top vel and bottom vel first or again for more accurate results.\n');
     end
+    
+    
     for i = 1:N
+        done = 0;
         for j = STRUCT(caseNum).splitter_idx:-1:1
-            if (STRUCT(caseNum).u(j,i) < (2 - grade/100) * lower_speed(i))
+            if (STRUCT(caseNum).u(j,i) < (2 - grade/100) * lower_speed(i) && done == 0)
                 ydown(i) = j;
+                done = 1;
                 break;
             end
         end

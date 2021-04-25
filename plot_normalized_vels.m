@@ -4,8 +4,8 @@ if (~(length(STRUCT(caseNum).X) == 0))
 [~, ~, ~, ~, ~, ~,fully_developed_region_start,fully_developed_region_stop] = getInfo(caseNum);
 count = 1;
 profile = [];
-eta = 1;
-    for i = fully_developed_region_start:.01:fully_developed_region_stop
+eta = [];
+    for i = fully_developed_region_start:.005:fully_developed_region_stop
         [profile(count,:), eta] = plot_normalized_vel(STRUCT, i, caseNum,grade);
         count = count + 1;
         
