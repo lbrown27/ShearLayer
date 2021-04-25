@@ -8,12 +8,9 @@ lower_speed = STRUCT(caseNum).bottom_vel(1);
 eta = linspace(-1,1, N);
 %STRUCT = thickness(STRUCT,grade);
 y0 = STRUCT(caseNum).middle(x_idx);
-lower_thick = STRUCT(caseNum).y(STRUCT(caseNum).thickness_lower(x_idx));
-upper_thick = STRUCT(caseNum).y(STRUCT(caseNum).thickness_upper(x_idx));
-b0_lower = abs(lower_thick-y0);
-b0_upper = abs(upper_thick-y0);
+b0 = abs(STRUCT(caseNum).y(STRUCT(caseNum).lower_thickness(x_idx))-y0;
 
-y_graph = linspace(lower_thick, upper_thick, N); %convert eta to a y value to graph
+y_graph = eta * b0 + y0; %convert eta to a y value to graph
 %y_graph = STRUCT(caseNum).
 u_graph = STRUCT(caseNum).F_u(x0*ones(1,N),y_graph);
 upper_speed = u_graph(length(u_graph));
