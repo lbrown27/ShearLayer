@@ -1,0 +1,56 @@
+# This is test input for CompressibleNavierStokes solver
+
+PARTITION:
+    auto_tune: True
+    x: 0
+    y: 0
+    z: 0
+
+NUMERICS:
+    nx: 32
+    ny: 1
+    nz: 1
+    integrator: "RK4"
+    adaptive_timestep: True
+    CFL: 0.4
+    dt: 1.0e-10
+    t_final: 1.0
+    operators:
+        alpha_f: 0.495
+
+DOMAIN:
+    size:
+        x: 6.28318530717958623
+        y: 6.28318530717958623
+        z: 6.28318530717958623
+    periodicity:
+        x: True
+        y: True
+        z: True
+
+IO:
+    dirInput: "./"
+    dirOutput: "./"
+    meshFile: "mesh.h5"
+    useRestart: False
+    restartPrefix: "restart_"
+    restartFreq: 1.0
+    resetSimTime: 0.0
+    resetRestartCounter: 0
+    enableOutput: False
+    resetOutputCounter: 0
+    outputFreq: 1.0e+10
+    outputPrefix: "output_"
+
+EOS:
+    type: "Perfect Gas"
+    Rg: 1.0
+    gamma: 1.4
+
+TRANSPORT:
+    type: "Power Law"
+
+
+TEST:
+    amp: 1.0e-2
+    width: 0.1
